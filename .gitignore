@@ -1,0 +1,15 @@
+# Unity関連フォルダを除外
+Library/
+Temp/
+Obj/
+Build/
+Logs/
+UserSettings/
+ProjectSettings/
+Packages/
+OnlinePlayDesk_BurstDebugInformation_DoNotShip/
+*.csproj
+*.sln
+
+# GitHub Pagesで公開するフォルダだけ含めたい
+!docs/
