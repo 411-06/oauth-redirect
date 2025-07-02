@@ -5,12 +5,14 @@
   <title>OAuth Redirect</title>
   <script>
     const params = new URLSearchParams(window.location.search);
-    const code = params.get("code") || "TEST-CODE-123"; // ← 仮コード
+    const code = params.get("code") || "TEST-CODE-123";
+
     if (window.opener) {
       window.opener.postMessage({ auth_code: code }, "*");
       console.log("✅ return.html：postMessageで送信したで → " + code);
     } else {
-      console.log("⚠️ return.html：codeが見つからん or openerがnullや");
+      console.log("⚠️ return.html：openerがnullや、localStorageに保存するで");
+      localStorage.setItem("auth_code", code); // ← Unity側で拾う
     }
   </script>
 </head>
