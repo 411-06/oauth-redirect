@@ -107,6 +107,16 @@
               unityInstance.SendMessage("AuthHandler", "OnReceiveCode", event.data.auth_code);
             }
           });
+          
+          setTimeout(() => {
+            const fallbackCode = localStorage.getItem("auth_code");
+            if (fallbackCode) {
+              console.log("🔁 Fallback：localStorageから認可コード取得 → " + fallbackCode);
+              unityInstance.SendMessage("AuthHandler", "OnReceiveCode", fallbackCode);
+            } else {
+              console.log("⚠️ Fallback：認可コードが見つからんかったで（postMessageもlocalStorageも失敗）");
+            }
+          }, 3000);
 
         }).catch((message) => {
           alert(message);
