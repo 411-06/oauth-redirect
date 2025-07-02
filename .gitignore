@@ -13,3 +13,4 @@ OnlinePlayDesk_BurstDebugInformation_DoNotShip/
 
 # GitHub Pagesで公開するフォルダだけ含めたい
 !docs/
+.DS_Store
