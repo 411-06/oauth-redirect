@@ -1,22 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>OAuth Redirect</title>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code") || "TEST-CODE-123";
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code") || "TEST-CODE-123";
 
-    if (window.opener) {
-      window.opener.postMessage({ auth_code: code }, "*");
-      console.log("✅ return.html：postMessageで送信したで → " + code);
-    } else {
-      console.log("⚠️ return.html：openerがnullや、localStorageに保存するで");
-      localStorage.setItem("auth_code", code); // ← Unity側で拾う
-    }
-  </script>
-</head>
-<body>
-  <p>認証が完了しました。画面を閉じてください。</p>
-</body>
-</html>
+  if (window.opener) {
+    window.opener.postMessage({ auth_code: code }, "*");
+    console.log("✅ return.html：postMessageで送信したで → " + code);
+    window.close();
+  } else {
+    console.log("⚠️ return.html：openerがnullや、localStorageに保存して index.html に戻るで");
+    localStorage.setItem("auth_code", code);
+    window.location.href = "index.html"; // ✅ Unity側が認可コード拾えるようにリダイレクト
+  }
+</script>
