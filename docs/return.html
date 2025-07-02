@@ -6,13 +6,12 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
-    if (code) {
-      localStorage.setItem("auth_code", code); // ← ここ修正！
-      console.log("✅ return.html：認可コードを保存したで！");
+    if (code && window.opener) {
+      window.opener.postMessage({ auth_code: code }, "*");
+      console.log("✅ return.html：postMessageで送信したで → " + code);
     } else {
-      console.log("⚠️ return.html：codeが見つからんかった");
+      console.log("⚠️ return.html：codeが見つからん or openerがnullや");
     }
-
     window.close();
   </script>
 </head>
