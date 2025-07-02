@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>OAuth Redirect</title>
-    <script>
-      // 認可コードをURLから抜き出してlocalStorageに保存
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get("code");
-      if (code) {
-        console.log("✅ return.html：認可コードを保存したで！ → " + code);
-        localStorage.setItem("auth_code", code);
-      } else {
-        console.log("⚠️ return.html：code が見つからんかったで");
-      }
+<head>
+  <meta charset="UTF-8" />
+  <title>OAuth Redirect</title>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    if (code) {
+      localStorage.setItem("auth_code", code); // ← ここ修正！
+      console.log("✅ return.html：認可コードを保存したで！");
+    } else {
+      console.log("⚠️ return.html：codeが見つからんかった");
+    }
 
-      // 自動で閉じる（WebGLでは効かんかもしれんが）
-      window.close();
-    </script>
-  </head>
-  <body>
-    <p>認証が完了しました。画面を閉じてください。</p>
-  </body>
+    window.close();
+  </script>
+</head>
+<body>
+  <p>認証が完了しました。画面を閉じてください。</p>
+</body>
 </html>
