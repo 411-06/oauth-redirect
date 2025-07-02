@@ -5,14 +5,13 @@
   <title>OAuth Redirect</title>
   <script>
     const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-    if (code && window.opener) {
+    const code = params.get("code") || "TEST-CODE-123"; // ← 仮コード
+    if (window.opener) {
       window.opener.postMessage({ auth_code: code }, "*");
       console.log("✅ return.html：postMessageで送信したで → " + code);
     } else {
       console.log("⚠️ return.html：codeが見つからん or openerがnullや");
     }
-    window.close();
   </script>
 </head>
 <body>
