@@ -104,7 +104,6 @@
           window.addEventListener("message", function (event) {
             if (event.data && event.data.auth_code) {
               console.log("✅ JS：postMessageで受信したで → " + event.data.auth_code);
-              unityInstance.SendMessage("AuthHandler", "OnReceiveCode", event.data.auth_code);
             }
           });
           
@@ -112,7 +111,6 @@
             const fallbackCode = localStorage.getItem("auth_code");
             if (fallbackCode) {
               console.log("🔁 Fallback：localStorageから認可コード取得 → " + fallbackCode);
-              unityInstance.SendMessage("AuthHandler", "OnReceiveCode", fallbackCode);
             } else {
               console.log("⚠️ Fallback：認可コードが見つからんかったで（postMessageもlocalStorageも失敗）");
             }
