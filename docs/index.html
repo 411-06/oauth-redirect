@@ -102,20 +102,21 @@
 
           // ✅ OAuth認可コード受け取り
           window.addEventListener("message", function (event) {
-            if (event.data && event.data.auth_code) {
-              console.log("✅ JS：postMessageで受信したで → " + event.data.auth_code);
-            }
-          });
-          
-          setTimeout(() => {
-            const fallbackCode = localStorage.getItem("auth_code");
-            if (fallbackCode) {
-              console.log("🔁 Fallback：localStorageから認可コード取得 → " + fallbackCode);
-            } else {
-              console.log("⚠️ Fallback：認可コードが見つからんかったで（postMessageもlocalStorageも失敗）");
-            }
-          }, 3000);
+  if (event.data && event.data.auth_code) {
+    console.log("✅ JS：postMessageで受信したで → " + event.data.auth_code);
+    unityInstance.SendMessage("OAuthController", "OnReceiveCode", event.data.auth_code); // ← ここ重要！
+  }
+});
 
+setTimeout(() => {
+  const fallbackCode = localStorage.getItem("auth_code");
+  if (fallbackCode) {
+    console.log("🔁 Fallback：localStorageから認可コード取得 → " + fallbackCode);
+    unityInstance.SendMessage("OAuthController", "OnReceiveCode", fallbackCode); // ← ここも！
+  } else {
+    console.log("⚠️ Fallback：認可コードが見つからんかったで（postMessageもlocalStorageも失敗）");
+  }
+}, 3000);
         }).catch((message) => {
           alert(message);
         });
