@@ -1,133 +1,129 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Unity Web Player | OnlinePlayDesk</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #231F20;
-      height: 100%;
-      overflow: hidden;
-    }
-    #unity-container {
-      width: 100%;
-      height: 100%;
-      position: fixed;
-      top: 0; left: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    canvas {
-      background: #231F20;
-    }
-    #unity-loading-bar {
-      width: 100%;
-      position: absolute;
-      bottom: 10px;
-      left: 0;
-      text-align: center;
-    }
-    #unity-progress-bar-empty {
-      background: gray;
-      width: 50%;
-      margin: auto;
-      height: 10px;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-    #unity-progress-bar-full {
-      background: #4af;
-      width: 0%;
-      height: 100%;
-    }
-  </style>
-</head>
-<body>
-  <div id="unity-container" class="unity-desktop">
-    <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
-    <div id="unity-loading-bar">
-      <div id="unity-progress-bar-empty">
-        <div id="unity-progress-bar-full"></div>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity Web Player | OnlinePlayDesk</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: #231F20;
+        height: 100%;
+        overflow: hidden;
+      }
+      #unity-container {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0; left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      canvas {
+        background: #231F20;
+      }
+      #unity-loading-bar {
+        width: 100%;
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        text-align: center;
+      }
+      #unity-progress-bar-empty {
+        background: gray;
+        width: 50%;
+        margin: auto;
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      #unity-progress-bar-full {
+        background: #4af;
+        width: 0%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
       </div>
     </div>
-  </div>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
 
-  <script>
-    var canvas = document.querySelector("#unity-canvas");
+      function unityShowBanner(msg, type) {
+        console.log(msg);
+      }
 
-    function unityShowBanner(msg, type) {
-      console.log(msg);
-    }
+        var buildUrl = "Build";
+        var loaderUrl = buildUrl + "/docs.loader.js"; // ✅ ファイル名と一致させる
+        var config = {
+          dataUrl: buildUrl + "/docs.data",
+          frameworkUrl: buildUrl + "/docs.framework.js",
+          codeUrl: buildUrl + "/docs.wasm",
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: "Akira Itoi",
+          productName: "OnlinePlayDesk",
+          productVersion: "1.0",
+          showBanner: unityShowBanner,
+      };
 
-    var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/docs.loader.js";
-    var config = {
-      dataUrl: buildUrl + "/docs.data",
-      frameworkUrl: buildUrl + "/docs.framework.js",
-      codeUrl: buildUrl + "/docs.wasm",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "Akira Itoi",
-      productName: "OnlinePlayDesk",
-      productVersion: "1.0",
-      showBanner: unityShowBanner,
-    };
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        document.querySelector("#unity-container").className = "unity-mobile";
+        canvas.className = "unity-mobile";
+      } else {
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
+      }
 
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      var meta = document.createElement('meta');
-      meta.name = 'viewport';
-      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-      document.getElementsByTagName('head')[0].appendChild(meta);
-      document.querySelector("#unity-container").className = "unity-mobile";
-      canvas.className = "unity-mobile";
-    } else {
-      canvas.style.width = "960px";
-      canvas.style.height = "600px";
-    }
+      document.querySelector("#unity-loading-bar").style.display = "block";
 
-    document.querySelector("#unity-loading-bar").style.display = "block";
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          document.querySelector("#unity-loading-bar").style.display = "none";
+          document.querySelector("#unity-fullscreen-button")?.addEventListener("click", () => {
+            unityInstance.SetFullscreen(1);
+          });
 
-    var script = document.createElement("script");
-    script.src = loaderUrl;
-    script.onload = () => {
-      createUnityInstance(canvas, config, (progress) => {
-        document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-      }).then((unityInstance) => {
-        document.querySelector("#unity-loading-bar").style.display = "none";
+          // ✅ OAuth認可コード受け取り
+          window.addEventListener("message", function (event) {
+            if (event.data && event.data.auth_code) {
+              console.log("✅ JS：postMessageで受信したで → " + event.data.auth_code);
+              unityInstance.SendMessage("AuthHandler", "OnReceiveCode", event.data.auth_code);
+            }
+          });
+          
+          setTimeout(() => {
+            const fallbackCode = localStorage.getItem("auth_code");
+            if (fallbackCode) {
+              console.log("🔁 Fallback：localStorageから認可コード取得 → " + fallbackCode);
+              unityInstance.SendMessage("AuthHandler", "OnReceiveCode", fallbackCode);
+            } else {
+              console.log("⚠️ Fallback：認可コードが見つからんかったで（postMessageもlocalStorageも失敗）");
+            }
+          }, 3000);
 
-        // フルスクリーン対応（任意ボタン対応）
-        document.querySelector("#unity-fullscreen-button")?.addEventListener("click", () => {
-          unityInstance.SetFullscreen(1);
+        }).catch((message) => {
+          alert(message);
         });
+      };
 
-        // ✅ postMessageでOAuth認可コード受け取り
-        window.addEventListener("message", function (event) {
-          if (event.data && event.data.auth_code) {
-            console.log("✅ JS：postMessageで受信 → " + event.data.auth_code);
-            unityInstance.SendMessage("AuthHandler", "OnReceiveCode", event.data.auth_code);
-          }
-        });
-
-        // ✅ fallbackでlocalStorageも確認
-        setTimeout(() => {
-          const fallbackCode = localStorage.getItem("auth_code");
-          if (fallbackCode) {
-            console.log("🔁 Fallback：localStorageから認可コード取得 → " + fallbackCode);
-            unityInstance.SendMessage("AuthHandler", "OnReceiveCode", fallbackCode);
-          } else {
-            console.log("⚠️ Fallback：認可コード見つからず（postMessageとlocalStorage両方失敗）");
-          }
-        }, 3000);
-
-      }).catch((message) => {
-        alert(message);
-      });
-    };
-
-    document.body.appendChild(script);
-  </script>
-</body>
+      document.body.appendChild(script);
+    </script>
+  </body>
 </html>
