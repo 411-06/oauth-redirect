@@ -10,20 +10,13 @@
   const code = params.get("code");
 
   if (code) {
-    if (window.opener) {
-      // ✅ JS経由で送信（Unity側が postMessage で受信）
-      window.opener.postMessage({ auth_code: code }, "*");
-      console.log("✅ return.html：postMessageで送信したで → " + code);
-      window.close();
-    } else {
-      // ✅ fallback：localStorage に保存してリダイレクト
-      console.log("⚠️ return.html：openerがnull、localStorageに保存して index.html に戻るで");
-      localStorage.setItem("auth_code", code);
-      window.location.href = "index.html";
-    }
+    // ✅ DeepLinkでiOSアプリに戻す
+    const deepLink = "com.akirasapp:/oauth2redirect?code=" + encodeURIComponent(code);
+    console.log("✅ return.html：DeepLinkでアプリに戻す → " + deepLink);
+    window.location.href = deepLink;
   } else {
     console.warn("❌ return.html：code が見つからんかったで");
-    window.location.href = "index.html";
+    document.body.innerHTML = "<p>❌ 認可コードが見つかりませんでした</p>";
   }
 </script>
 </body>
