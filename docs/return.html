@@ -6,18 +6,20 @@
 </head>
 <body>
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
 
-  if (code) {
-    // ✅ DeepLinkでiOSアプリに戻す
-    const deepLink = "com.akirasapp:/oauth2redirect?code=" + encodeURIComponent(code);
-    console.log("✅ return.html：DeepLinkでアプリに戻す → " + deepLink);
-    window.location.href = deepLink;
-  } else {
-    console.warn("❌ return.html：code が見つからんかったで");
-    document.body.innerHTML = "<p>❌ 認可コードが見つかりませんでした</p>";
-  }
+    if (code) {
+      // ✅ DeepLinkでiOSアプリに戻す（コードはURLエンコード）
+      const deepLink = "com.akirasapp:/oauth2redirect?code=" + encodeURIComponent(code);
+      console.log("✅ return.html：DeepLinkでアプリに戻す → " + deepLink);
+      window.location.href = deepLink;
+    } else {
+      console.warn("❌ return.html：code が見つからんかったで");
+      document.body.innerHTML = "<p style='font-family: sans-serif;'>❌ 認可コードが見つかりませんでした</p>";
+    }
+  })();
 </script>
 </body>
 </html>
