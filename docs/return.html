@@ -11,13 +11,20 @@
     const code = params.get("code");
 
     if (code) {
-      // ✅ DeepLinkでiOSアプリに戻す（コードはURLエンコード）
       const deepLink = "com.akirasapp:/oauth2redirect?code=" + encodeURIComponent(code);
       console.log("✅ return.html：DeepLinkでアプリに戻す → " + deepLink);
+
+      // 自動遷移
       window.location.href = deepLink;
+
+      // fallback用の表示
+      document.body.innerHTML = `
+        <p style="font-family: sans-serif;">アプリに戻れなかった場合は、下のボタンを押して戻ってください：</p>
+        <a href="${deepLink}" style="font-size: 20px; color: blue;">▶️ アプリに戻る</a>
+      `;
     } else {
       console.warn("❌ return.html：code が見つからんかったで");
-      document.body.innerHTML = "<p style='font-family: sans-serif;'>❌ 認可コードが見つかりませんでした</p>";
+      document.body.innerHTML = "<p>❌ 認可コードが見つかりませんでした</p>";
     }
   })();
 </script>
