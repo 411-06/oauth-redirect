@@ -1,16 +1,31 @@
-# Unity関連フォルダを除外
+# Unity関連ビルド生成物（絶対入れない）
 Library/
 Temp/
 Obj/
 Logs/
 UserSettings/
-ProjectSettings/
+ProjectSettings/   # ← Gitでプロジェクト設定ごと管理したいなら外す（後述）
 Packages/
-OnlinePlayDesk_BurstDebugInformation_DoNotShip/
-.DS_Store/
 *.csproj
 *.sln
+*.user
+*.unityproj
+*.pidb
+*.suo
+*.apk
+*.xcodeproj
 
-# GitHub Pagesで公開するフォルダだけ含めたい
-!docs/
+# ビルド成果物
+Builds/
+build/
+*.ipa
+*.app
+*.exe
+*.dll
+
+# Mac特有
 .DS_Store
+
+# GitHub Pages用：docsだけ公開したいなら以下を追加
+# docs/ は除外せずに追跡対象にする
+!docs/
